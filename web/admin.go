@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/kellegous/go/backend"
+	"github.com/stgarf/go-links/backend"
 )
 
 type adminHandler struct {
@@ -13,7 +13,7 @@ type adminHandler struct {
 }
 
 func adminGet(backend backend.Backend, w http.ResponseWriter, r *http.Request) {
-	p := parseName("/admin/", r.URL.Path)
+	p, _ := parseName("/.hidden_adminz/", r.URL.Path)
 
 	if p == "" {
 		writeJSONOk(w)
@@ -26,12 +26,10 @@ func adminGet(backend backend.Backend, w http.ResponseWriter, r *http.Request) {
 	if p == "dumps" {
 		if golinks, err := backend.GetAll(ctx); err != nil {
 			writeJSONBackendError(w, err)
-			return
 		} else {
 			writeJSON(w, golinks, http.StatusOK)
 		}
 	}
-
 }
 
 func (h *adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
